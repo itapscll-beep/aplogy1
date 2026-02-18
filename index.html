@@ -1,172 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>I'm So Sorry</title>
-    <style>
-        :root {
-            --primary: #ff5e62;
-            --bg: #f8f9fa;
-        }
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: var(--bg);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            overflow: hidden;
-        }
-        
-        /* Floating Sad Emojis Animation */
-        .emoji-rain {
-            position: absolute;
-            top: -50px;
-            font-size: 24px;
-            animation: fall linear forwards;
-            z-index: -1;
-        }
-        @keyframes fall {
-            to { transform: translateY(110vh) rotate(360deg); }
-        }
-
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 24px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-            position: relative;
-            z-index: 10;
-        }
-
-        #main-emoji {
-            font-size: 60px;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        h1 { color: #444; font-size: 26px; margin-bottom: 10px; }
-        p { color: #666; line-height: 1.6; font-size: 15px; }
-        
-        .apology-box {
-            background: #fff5f5;
-            padding: 15px;
-            border-left: 5px solid var(--primary);
-            margin: 20px 0;
-            text-align: left;
-            font-style: italic;
-            border-radius: 4px;
-        }
-
-        .btn-group {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 25px;
-            min-height: 50px;
-        }
-
-        button {
-            padding: 12px 35px;
-            border-radius: 50px;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-            font-size: 16px;
-        }
-
-        #yesBtn {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 94, 98, 0.3);
-        }
-
-        #noBtn {
-            background: #eee;
-            color: #888;
-            position: absolute;
-        }
-
-        .success-msg {
-            display: none;
-            color: #2ecc71;
-            font-weight: bold;
-            margin-top: 20px;
-            font-size: 18px;
-            animation: fadeIn 0.5s;
-        }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <span id="main-emoji">😭</span>
-    <h1>I'm So Sorry...</h1>
-    
-    <p>I know I broke my word. Trust is everything, and I hate that I let you down. 🥺</p>
-
-    <div class="apology-box">
-        "I'm not asking you to forget, I'm asking for one more chance to show you I can keep my promise. I won't fail you again."
-    </div>
-
-    <p><strong>Will you give me one more chance?</strong></p>
-
-    <div class="btn-group">
-        <button id="yesBtn" onclick="accepted()">Yes</button>
-        <button id="noBtn" onmouseover="moveButton()" onclick="moveButton()">No</button>
-    </div>
-
-    <div id="success-msg" class="success-msg">
-        Thank you for believing in me again. ❤️
-    </div>
+<div class="btn-container">
+    <button id="yesBtn" onclick="forgive()">Yes</button>
+    <button id="noBtn" ontouchstart="moveBtn(event)" onmouseover="moveBtn(event)">No</button>
 </div>
 
 <script>
-    // Create falling sad emojis
-    function createEmoji() {
-        const emojis = ['😭', '🥺', '💔', '💧', '🩹'];
-        const e = document.createElement('div');
-        e.classList.add('emoji-rain');
-        e.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-        e.style.left = Math.random() * 100 + "vw";
-        e.style.animationDuration = Math.random() * 2 + 3 + "s";
-        document.body.appendChild(e);
-        setTimeout(() => e.remove(), 5000);
-    }
-    const rainInterval = setInterval(createEmoji, 300);
-
-    function moveButton() {
+    function moveBtn(event) {
+        // Prevent the actual click/tap from happening
+        if (event) event.preventDefault(); 
+        
         const btn = document.getElementById('noBtn');
-        const x = Math.random() * (window.innerWidth - btn.offsetWidth);
-        const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+        
+        // Calculate random positions
+        // Subtracting 100 to keep the button from going off-screen
+        const x = Math.random() * (window.innerWidth - 100);
+        const y = Math.random() * (window.innerHeight - 100);
         
         btn.style.position = 'fixed';
         btn.style.left = x + 'px';
         btn.style.top = y + 'px';
+        btn.style.zIndex = "1000"; // Keep it on top of everything
     }
 
-    function accepted() {
-        clearInterval(rainInterval); // Stop the sad rain
-        document.getElementById('main-emoji').innerText = "💖";
-        document.getElementById('success-msg').style.display = 'block';
+    function forgive() {
+        document.getElementById('status').style.display = 'block';
         document.getElementById('noBtn').style.display = 'none';
-        document.getElementById('yesBtn').style.transform = 'scale(1.2)';
-        
-        // Remove all sad emojis from screen
-        const sadOnes = document.querySelectorAll('.emoji-rain');
-        sadOnes.forEach(s => s.remove());
-
-        alert("I promise to do better. Thank you for your heart.");
+        document.getElementById('face').innerText = '💖';
+        alert("I promise to be better. Thank you for another chance! ❤️");
     }
 </script>
-
-</body>
-</html>
